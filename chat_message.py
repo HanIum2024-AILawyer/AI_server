@@ -2,7 +2,7 @@
 
 from sqlite3 import Connection
 from datetime import datetime
-from langchain.llms import Ollama  # Ollama의 LLM 불러오기
+from langchain_community.llms import Ollama  # Ollama의 LLM 불러오기
 from langchain.chains import SimpleSequentialChain  # LangChain의 간단한 체인 사용
 
 def chat_message(room_id: str, content: str, db: Connection):
