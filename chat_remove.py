@@ -1,13 +1,19 @@
-def chat_remove(sender_id: str, db):
-    # 특정 sender_id의 모든 채팅 기록을 삭제
-    with db:
-        db.execute("""
-        DELETE FROM chat_history WHERE sender_id = ?
-        """, (sender_id,))
-        success = db.total_changes > 0
+# chat_remove.py
 
-    return {
-        "senderId": sender_id,
-        "success": success,
-        "senderType": "AI"
-    }
+from sqlite3 import Connection
+
+def chat_remove(roomId: str, db: Connection) -> bool:
+    cursor = db.cursor()
+
+    # 1. roomId와 일치하는 모든 대화 기록 삭제
+    cursor.execute("DELETE FROM chat_history WHERE roomId = ?", (roomId,))
+    
+    # 2. 변경사항 커밋
+    db.commit()
+
+    # 3. 삭제된 행의 수를 반환하여 성공 여부를 확인
+    deleted_rows = cursor.rowcount
+
+    # 4. 성공 여부를 반환
+    return deleted_rows > 0
+
