@@ -33,13 +33,12 @@ prompt = PromptTemplate(
         "3. 따라서 채권자는 채무자에게 위 금원의 지급을 수차에 걸쳐 지급하여 줄 것을 독촉하였으나 차일피일 기일만 지연하고 있고, 신청일 현재까지 하등의 이유없이 그 지급에 불응하고 있으므로 채권자는 신청취지와 같은 대여금과 소정의 손해금율에 의한 금원을 지급받고자 본 신청에 이른것입니다."
         "----------------"
     )
-) 
-
+)
 
 def make_doc(input_data: dict):
     # 피고 숫자에 맞는 Word 템플릿 파일 로드
-    defendant_count = input_data["defendant_count"]
-    word_file_path = f"./datas/word/word_소송장_{defendant_count}명.docx"
+    claim_count = input_data["claim_count"]  # API에서 받아오는 'claim_count'로 수정
+    word_file_path = f"./datas/word/word_소송장_{claim_count}명.docx"
     
     # 템플릿 파일이 존재하는지 확인
     if not os.path.exists(word_file_path):
@@ -65,10 +64,14 @@ def make_doc(input_data: dict):
 
     # 수정된 문서를 파일로 저장
     output_file_name = "./output/new_document.docx"
+    os.makedirs(os.path.dirname(output_file_name), exist_ok=True)  # 디렉토리가 없으면 생성
     doc.save(output_file_name)
 
     # 파일이 생성되었는지 확인
     if not os.path.exists(output_file_name):
         raise FileNotFoundError(f"Failed to create file: {output_file_name}")
 
-    return output_file_name
+    # AI가 생성한 코멘트를 반환 (원하는 경우 추가 가능)
+    ai_comment = f"사건명: {case_name}, 청구취지: {claim_purpose}, 청구원인: {claim_reason}"
+
+    return {"doc": output_file_name, "aiComment": ai_comment}
