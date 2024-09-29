@@ -10,6 +10,7 @@ from contextlib import asynccontextmanager
 import os
 from sqlite3 import connect, Connection
 from docx import Document
+from mangum import Mangum
 
 # FastAPI 애플리케이션 생성
 app = FastAPI()
@@ -110,7 +111,7 @@ async def handle_fix_doc(file: UploadFile = File(...)):
     try:
         return FileResponse(modified_file_path, 
                             media_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
-                            filename="fixed_document.docx")
+                            filename="./output/fixed_document.docx")
     finally:
         # 원본 파일과 수정된 파일 모두 삭제
         if os.path.exists(uploaded_file_name):
@@ -141,4 +142,3 @@ def handle_make_doc(request: MakeDocRequest):
         pass
     #     if os.path.exists(file_name):
     #         os.remove(file_name)
-
