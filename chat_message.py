@@ -5,13 +5,15 @@ from langchain.chains import LLMChain  # LLMChain 사용
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings  # 사용할 임베딩 라이브러리
+from text_processing import initial_chroma_db
+
 
 # Ollama LLM을 함수 밖에서 초기화하여 처음에 한 번만 실행
 # 로컬에서 mistral:latest 모델을 불러오기
 llm = Ollama(model="mistral:latest")
 
-# ChromaDB 초기화 (벡터 저장소 생성)
-vector_store = Chroma(collection_name="legal_documents", embedding_function=OpenAIEmbeddings())
+# ChromaDB 초기화
+vector_store = initial_chroma_db()
 
 # 대화의 문맥을 설정하는 프롬프트 템플릿
 prompt = PromptTemplate(

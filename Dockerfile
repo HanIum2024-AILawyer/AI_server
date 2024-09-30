@@ -8,10 +8,13 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # Ollama 설치 스크립트 다운로드 및 실행
-RUN curl -o- https://ollama.com/download.sh | bash
+RUN curl -fsSL https://ollama.com/install.sh | sh
 
 # Ollama가 설치된 경로를 PATH에 추가
 ENV PATH="/root/.ollama/bin:${PATH}"
+
+# Ollama 앱을 백그라운드에서 실행
+RUN ollama serve &
 
 # Ollama 모델 다운로드 (Mistral 모델)
 RUN ollama pull mistral

@@ -150,4 +150,6 @@ yarl==1.9.4
 zipp==3.19.2
 mangum==0.17.0
 
+pandas
 ollama
+chromadb
